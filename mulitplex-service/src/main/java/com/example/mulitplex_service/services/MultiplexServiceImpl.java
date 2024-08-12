@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +36,11 @@ import com.example.mulitplex_service.repository.SeatLogRepository;
 import com.example.mulitplex_service.repository.SeatsRepository;
 import com.example.mulitplex_service.repository.ShowtimeRepository;
 import com.example.mulitplex_service.repository.UserRepository;
+import com.example.mulitplex_service.utils.EmailDetails;
 import com.example.mulitplex_service.utils.MovieTime;
 import com.example.mulitplex_service.utils.SeatsBooked;
 
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -59,7 +64,9 @@ public class MultiplexServiceImpl implements MultiplexService {
     private BookingDetailRepository bookingdetailRepository;
     @Autowired
     private SeatLogRepository seatLogRepository;
-
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}") private String sender;
     private static final List<LocalTime> predefinedTimeSlots = Arrays.asList(
             LocalTime.of(10, 0),
             LocalTime.of(12, 0),
@@ -359,8 +366,9 @@ public class MultiplexServiceImpl implements MultiplexService {
         }
         bookings.setBookingDetails(bookingDetailsList);
 
-        // Save and return the booking
-        return bookingRepository.save(bookings);
+      Bookings booking =  bookingRepository.save(bookings);
+      sendSimpleMail(new EmailDetails(), booking.getId());
+        return booking;
     }
 
     @Override
@@ -406,14 +414,96 @@ public class MultiplexServiceImpl implements MultiplexService {
 
     @Override
     public List<Bookings> showReports(LocalDate date) {
-       List<Bookings> r = bookingRepository.findAllByShowDate(date);
-       return r;
+        List<Bookings> r = bookingRepository.findAllByShowDate(date);
+        return r;
     }
 
     @Override
     public List<Users> getAllAdmins() {
-       return userRepository.findAdmins();
+        return userRepository.findAdmins();
     }
 
-    
+    public String sendSimpleMail(EmailDetails details, long bookingId) {
+    try {
+        Bookings b = showBooking(bookingId);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        helper.setFrom(sender);
+        helper.setTo(b.getUser().getEmail());
+        helper.setSubject("Your invoice for movie: " + b.getShowtime().getMovie().getTitle() + " is confirmed.");
+        helper.setText(getInvoice(b), true); 
+
+        javaMailSender.send(mimeMessage);
+        return "Mail Sent Successfully...";
+    } catch (Exception e) {
+        return "Error while Sending Mail";
+    }
+}
+
+// Method to generate HTML invoice content
+public String getInvoice(Bookings b) {
+    String encodedUrl = "http://localhost:8080/owner/billBooking/"+b.getId();
+    StringBuilder htmlContent = new StringBuilder();
+
+    htmlContent.append("<!DOCTYPE html>")
+               .append("<html>")
+               .append("<head>")
+               .append("<meta charset=\"UTF-8\">")
+               .append("<title>Booking Invoice</title>")
+               .append("<style>")
+               .append("body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }")
+               .append(".invoice-box { max-width: 900px; margin: 30px auto; padding: 40px; border: 1px solid #ddd; border-radius: 8px; background: #fff; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); }")
+               .append(".invoice-box h2 { font-size: 28px; margin-bottom: 20px; color: #333; }")
+               .append(".invoice-box table { width: 100%; line-height: 1.6; border-collapse: collapse; }")
+               .append(".invoice-box table td { padding: 10px; vertical-align: top; color: #555; }")
+               .append(".invoice-box table tr td:nth-child(2) { text-align: right; }")
+               .append(".invoice-box table tr.top table td { padding-bottom: 20px; }")
+               .append(".invoice-box table tr.heading td { background: #f9f9f9; border-bottom: 2px solid #ddd; font-weight: bold; color: #333; }")
+               .append(".invoice-box table tr.item td { border-bottom: 1px solid #f1f1f1; }")
+               .append(".invoice-box table tr.item.last td { border-bottom: none; }")
+               .append(".invoice-box table tr.total td:nth-child(2) { border-top: 2px solid #ddd; font-weight: bold; color: #333; }")
+               .append(".invoice-box img { max-width: 150px; margin-top: 20px; border: 1px solid #ddd; border-radius: 8px; }")
+               .append(".invoice-box .footer { margin-top: 20px; font-size: 14px; color: #777; text-align: center; }")
+               .append("</style>")
+               .append("</head>")
+               .append("<body>")
+               .append("<div class=\"invoice-box\">")
+               .append("<h2>Booking Invoice</h2>")
+               .append("<table>")
+               .append("<tr class=\"top\"><td colspan=\"2\"><table><tr>")
+               .append("<td><strong>User Details:</strong><br>")
+               .append("Name: ").append(b.getUser().getUsername()).append("<br>")
+               .append("Email: ").append(b.getUser().getEmail()).append("</td>")
+               .append("<td>Booking Date: ").append(b.getBookingDate()).append("<br>")
+               .append("Invoice #: ").append(b.getId()).append("</td>")
+               .append("</tr></table></td></tr>")
+               .append("<tr class=\"heading\"><td>Movie Details</td><td></td></tr>")
+               .append("<tr class=\"item\"><td>Movie: ").append(b.getShowtime().getMovie().getTitle()).append("</td>")
+               .append("<td>Showtime: ").append(b.getShowtime().getShowDate()).append("</td></tr>")
+               .append("<tr class=\"heading\"><td>Screen Details</td><td></td></tr>")
+               .append("<tr class=\"item\"><td>Screen Name</td>")
+               .append("<td>").append(b.getShowtime().getScreen().getName()).append("</td></tr>")
+               .append("<tr class=\"heading\"><td>Seat</td><td>Price</td></tr>");
+
+    for (BookingDetails detail : b.getBookingDetails()) {
+        htmlContent.append("<tr class=\"item\">")
+                   .append("<td>").append(detail.getSeat().getSeatNumber()).append(" (Row: ").append(detail.getSeat().getRowNum()).append(")</td>")
+                   .append("<td>₹ ").append(detail.getPrice()).append("</td>")
+                   .append("</tr>");
+    }
+
+    htmlContent.append("<tr class=\"total\"><td></td>")
+               .append("<td>Total: ₹ ").append(String.format("%.2f", b.getTotalPrice())).append("</td>")
+               .append("</tr></table>")
+               .append("<div><h3>Scan QR Code to Access This Invoice</h3>")
+               .append("<img src=\"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=").append(encodedUrl)
+               .append("\" alt=\"QR Code\"></div>")
+               .append("<div class=\"footer\">Thank you for booking with us!</div>")
+               .append("</div>")
+               .append("</body>")
+               .append("</html>");
+
+    return htmlContent.toString();
+}
 }

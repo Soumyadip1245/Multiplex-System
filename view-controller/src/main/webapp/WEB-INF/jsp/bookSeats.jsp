@@ -147,8 +147,9 @@
                         Seats seat = seats.get(seatIndex);
                         double seatPrice = basePrice + basePrice * (row + 1) / 100;
                         String seatClass = bookedSeatIds.contains(seat.getId()) ? "seat unavailable" : "seat available";
-                        String seatHtml = String.format("<div class='%s' data-price='Price: ₹ %.2f' data-seat-id='%d' data-show-date='%s' data-show-time='%s' data-movie-id='%d' data-screen-id='%d' data-user-id='%s' title='Seat %d' data-showtime-id='%d'>%d</div>",
-                                seatClass, seatPrice, seat.getId(), showDate, showTime, movieId, screenId, userId, seat.getSeatNumber(), showtimeId, seat.getSeatNumber());
+                        String seatHtml = String.format(
+                            "<div class='%s' data-price='Price: ₹ %.2f' data-seat-id='%d' data-show-date='%s' data-show-time='%s' data-movie-id='%d' data-screen-id='%d' data-user-id='%s' title='Seat %d (₹ %.2f)' data-showtime-id='%d'>%d</div>",
+                            seatClass, seatPrice, seat.getId(), showDate, showTime, movieId, screenId, userId, seat.getSeatNumber(), seatPrice, showtimeId, seat.getSeatNumber());                        
                         out.print(seatHtml);
                     }
                 }
@@ -170,6 +171,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var selectedSeats = [];
@@ -225,8 +227,24 @@
             alert('No valid seats selected.');
             return;
         }
-
-        var payload = {
+        var rzpyUrl = "http://localhost:3080/payment/"+ (bookingDetails.reduce((total, seat) => total + seat.price, 0))*100
+        console.log(rzpyUrl)
+        fetch(rzpyUrl, {
+                method: 'GET',
+            })
+            .then(response => response.text())
+            .then(data => {
+                var options = {
+            "key": "rzp_test_RYaOC10U6IjI9N", 
+            "amount": (bookingDetails.reduce((total, seat) => total + seat.price, 0))*100,
+            "currency": "INR",
+            "name": "Movie Booking",
+            "description": "Book your movie ticket",
+            "image": "/your_logo.png",
+            "order_id": data, 
+            "handler": function (response) {
+                var confirmUrl = "http://localhost:3080/createBooking";
+                 var payload = {
             totalPrice: bookingDetails.reduce((total, seat) => total + seat.price, 0),
             bookingDate: selectedElements[0].getAttribute('data-show-date') + 'T' + selectedElements[0].getAttribute('data-show-time'),
             showtime_id: (selectedElements[0].getAttribute('data-showtime-id')),
@@ -247,8 +265,26 @@
            window.location.href = `/owner/billBooking/`+data.id;
                 })
                 .catch(error => console.error('Error:', error));
-            });
-        });
+            },
+            "prefill": {
+                "name": "User Name",
+                "email": "user@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Movie Address"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    })
+            })
+            })
+    
+       
 
 
     </script>
