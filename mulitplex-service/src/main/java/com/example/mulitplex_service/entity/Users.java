@@ -41,6 +41,8 @@ public class Users {
      @ManyToMany(mappedBy = "admins")
      @JsonIgnore
     private List<Multiplexes> adminMultiplexes;
+    @OneToMany(mappedBy = "user")
+    private List<UserVouchers> userVouchers;
     public enum Role {
         USER, ADMIN, OWNER
     }

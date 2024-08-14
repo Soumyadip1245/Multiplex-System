@@ -66,7 +66,7 @@
         <button class="navbar-toggler" type="button" onclick="toggleSidebar()" style="display: block;">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Owner Dashboard</a>
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -82,10 +82,7 @@
         <a href="/owner/dashboard">Dashboard</a>
         <a href="/owner/dashboard">Manage Multiplexes</a>
         <a href="/owner/manage-movies">Manage Movies</a>
-        <a href="/owner/manage-users">Manage Users</a>
         <a href="/owner/manage-bookings">Manage Bookings</a>
-        <a href="/owner/manage-vouchers">Manage Vouchers</a>
-        <a href="/owner/reports">Reports</a>
         <a href="/logout">Logout</a>
     </div>
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>

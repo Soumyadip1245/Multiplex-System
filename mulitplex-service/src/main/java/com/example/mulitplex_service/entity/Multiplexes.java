@@ -44,9 +44,5 @@ public class Multiplexes {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<Users> admins;
-    @Override
-    public String toString() {
-        return "Multiplexes [id=" + id + ", name=" + name + ", address=" + address + ", createdAt=" + createdAt
-                + ", owner=" + owner + ", screens=" + screens + "]";
-    }
+    
 }

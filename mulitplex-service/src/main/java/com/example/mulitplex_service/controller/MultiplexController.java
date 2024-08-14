@@ -23,9 +23,15 @@ import com.example.mulitplex_service.entity.Screens;
 import com.example.mulitplex_service.entity.Seats;
 import com.example.mulitplex_service.entity.Showtimes;
 import com.example.mulitplex_service.entity.Users;
+import com.example.mulitplex_service.entity.Vouchers;
 import com.example.mulitplex_service.services.MultiplexService;
+import com.example.mulitplex_service.services.VoucherService;
 import com.example.mulitplex_service.utils.MovieTime;
 import com.example.mulitplex_service.utils.SeatsBooked;
+import com.example.mulitplex_service.utils.VoucherResponse;
+
+
+
 
 
 
@@ -35,6 +41,8 @@ public class MultiplexController {
 
     @Autowired
     private MultiplexService multiplexService;
+    @Autowired
+    private VoucherService voucherService;
 
     @PostMapping("/add-multiplex/{id}")
     public ResponseEntity<Void> addMultiplex(@RequestBody Multiplexes m, @PathVariable("id") long ownerId) {
@@ -172,5 +180,28 @@ public class MultiplexController {
         return new ResponseEntity<>(r,HttpStatus.OK);
     }
     
+    @GetMapping("/getAllMultiplexesByAdminId/{id}")
+    public ResponseEntity<List<Multiplexes>> getAdminMultiplexesById(@PathVariable("id") long id) {
+        List<Multiplexes> r = multiplexService.findByAdminId(id);
+        return new ResponseEntity<>(r,HttpStatus.OK);
+    }
+    
+    @PostMapping("/createVoucher")
+    public ResponseEntity<Vouchers> createVouchers(@RequestBody Vouchers voucher) {
+       Vouchers v = voucherService.createVoucher(voucher);
+        return new ResponseEntity<>(v,HttpStatus.OK);
+    }
+    
+    @GetMapping("/getAllVouchers")
+    public ResponseEntity<List<Vouchers>> getAllVoucherList() {
+        return new ResponseEntity<>(voucherService.getAllVouchers(),HttpStatus.OK);
+    }
 
+    @GetMapping("/voucher-status/{name}")
+    public ResponseEntity<VoucherResponse> getVoucherStatus(@PathVariable("name") String name) {
+        VoucherResponse message = voucherService.findVoucher(name);
+        return new ResponseEntity<VoucherResponse>(message,HttpStatus.OK);
+    }
+    
+    
 }

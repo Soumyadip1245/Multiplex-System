@@ -1,4 +1,4 @@
-package com.example.view_controller.Controller;
+package com.example.view_controller.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +24,7 @@ import com.example.view_controller.entity.Screens;
 import com.example.view_controller.entity.Seats;
 import com.example.view_controller.entity.Showtimes;
 import com.example.view_controller.entity.Users;
+import com.example.view_controller.entity.Vouchers;
 import com.example.view_controller.repository.MultiplexRepository;
 import com.example.view_controller.service.user.UserService;
 import com.example.view_controller.utils.MovieTime;
@@ -302,6 +303,26 @@ public class OwnerController {
         userRepository.registerUserWithadmin(u, multiplexIds);
 
         return "redirect:/owner/manage-users";
+    }
+    @GetMapping("/manage-vouchers")
+    public String manageVouchers(Model model) {
+        ResponseEntity<Vouchers[]> response = restTemplate.getForEntity("http://localhost:3080/getAllVouchers", Vouchers[].class);
+        model.addAttribute("vouchers", response.getBody());
+        return "addVoucher";
+    }
+    @PostMapping("/add-voucher")
+    public String addVoucher(@RequestParam String type,
+                             @RequestParam double value,
+                             @RequestParam double minimumSpend,
+                             @RequestParam LocalDate expirationDate) {
+        String url = "http://localhost:3080/createVoucher";
+        Vouchers voucher = new Vouchers();
+        voucher.setType(type);
+        voucher.setValue(value);
+        voucher.setMinimumSpend(minimumSpend);
+        voucher.setExpirationDate(expirationDate.atStartOfDay());
+        ResponseEntity<Vouchers> response = restTemplate.postForEntity(url, voucher, Vouchers.class);
+        return "redirect:/owner/manage-vouchers";
     }
     
 }

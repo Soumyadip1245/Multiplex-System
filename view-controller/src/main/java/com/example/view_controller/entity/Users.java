@@ -38,6 +38,8 @@ public class Users {
     @ManyToMany(mappedBy = "admins")
     private List<Multiplexes> adminMultiplexes;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserVouchers> userVouchers;
     @Override
     public String toString() {
         return "Users [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", role="

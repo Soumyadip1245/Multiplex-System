@@ -12,4 +12,7 @@ public interface MultiplexRepository extends JpaRepository<Multiplexes, Long>{
     @Query(value = "CALL GetMultiplexesByOwnerId(:p_id)", nativeQuery = true)
     List<Multiplexes> findByOwnerId(@Param("p_id") long id);
 
+    @Query("SELECT m FROM Multiplexes m JOIN m.admins u WHERE u.id = :adminId")
+    List<Multiplexes> findByAdminId(@Param("adminId") long id);
+    
 }

@@ -40,4 +40,5 @@ public interface MultiplexService {
     List<MovieTime> findallmultiplexwithTime(long movieId, LocalDate showDate);
     List<Bookings> showReports(LocalDate date);
     List<Users> getAllAdmins();
+    List<Multiplexes> findByAdminId(long adminId);
 }   

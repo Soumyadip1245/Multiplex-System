@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 @Entity
@@ -39,7 +40,8 @@ public class Bookings {
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<BookingDetails> bookingDetails;
-
+    @OneToOne
+    private UserVouchers userVouchers;
     public enum Status {
         CONFIRMED, CANCELLED
     }
