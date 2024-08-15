@@ -66,8 +66,11 @@
          .seat-row-divider {
          text-align: center;
          height: 50px;
-         background-color: #dee2e6;
+         background-color: #f08080;
          margin: 20px 0;
+         }
+         .seat-floor{
+            background-color: #f08080;
          }
          .screen-ui {
          display: flex;
@@ -107,11 +110,51 @@
          padding-right: 10px;
          }
          .seat-divider {
-         width: 70px; 
-         height: 40px; 
-         background-color: #dee2e6;
-         margin: 0 10px;
-         }
+    width: 70px;
+    height: 40px;
+    background-color: #ff9800;
+    margin: 0 10px;
+    position: relative;
+}
+.seat-divider .text-content{
+    text-align: center;
+    font-weight: bold;
+}
+.seat-row:not(:first-child) .seat-divider::before {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 20px;
+    background-color: #ff9800;
+    left: 0;
+    top: -20px; 
+}
+
+.seat-row:not(:last-child) .seat-divider::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 20px;
+    background-color: #ff9800;
+    left: 0;
+}
+.seat-indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.seat-indicator {
+    display: flex;
+    align-items: center;
+    margin: 2px 15px 20px 15px;
+    font-size: 16px;
+}
+.seat-staircase{
+    background-color: #ff9800;
+}
       </style>
    </head>
    <body>
@@ -128,6 +171,29 @@
          <div class="screen-ui">
             <div class="screen">Screen</div>
          </div>
+         <div class="seat-indicators">
+            <div class="seat-indicator">
+                <div class="seat available"></div>
+                <span>Available</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat unavailable"></div>
+                <span>Unavailable</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat selected"></div>
+                <span>Selected</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat seat-staircase"></div>
+                <span>Stairs</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat seat-floor"></div>
+                <span>Floor</span>
+            </div>
+        </div>
+        
          <!-- Seat Layout -->
          <div id="seat-layout">
             <% 
@@ -184,7 +250,7 @@
          </div>
          <!-- Confirm Button -->
          <div class="text-center mt-4">
-            <button id="confirm-selection" class="btn btn-primary" disabled>Confirm
+            <button id="confirm-selection" class="btn btn-primary mb-5" disabled>Confirm
             Selection</button>
          </div>
       </div>

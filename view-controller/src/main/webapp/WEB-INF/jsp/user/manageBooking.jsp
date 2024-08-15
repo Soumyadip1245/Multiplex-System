@@ -60,7 +60,10 @@
         </head>
 
         <body>
-            <%@ include file="userSidebar.jsp" %>
+            <div class="div">
+                <%@ include file="userSidebar.jsp" %>
+
+            </div>
                 <div class="container mt-5">
                     <h1 class="mt-4 text-center">Movies List</h1>
                     <div class="row">

@@ -8,120 +8,153 @@
     <title>Screen Seat Layout</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-        }
         .seat {
-            width: 40px;
-            height: 40px;
-            background-color: #28a745;
-            color: #fff;
-            display: inline-block;
-            text-align: center;
-            line-height: 40px;
-            margin: 4px;
-            cursor: pointer;
-            position: relative;
-            border-radius: 4px;
-            transition: background-color 0.3s, transform 0.3s;
+        width: 40px;
+        height: 40px;
+        background-color: #e9ecef;
+        color: #6c757d;
+        display: inline-block;
+        text-align: center;
+        line-height: 40px;
+        margin: 4px;
+        cursor: pointer;
+        position: relative;
+        border-radius: 4px;
+        transition: background-color 0.3s, transform 0.3s;
         }
         .seat:hover {
-            transform: scale(1.1);
+        transform: scale(1.1);
         }
-        .seat.booked {
-            background-color: #dc3545;
+        .seat.selected {
+        background-color: rgb(88, 158, 252);
+        color: #fff;
         }
-        .seat.empty {
-            background-color: #e9ecef;
-            color: #6c757d;
+        .seat.unavailable {
+        background-color: #dc3545;
+        color: #fff;
+        pointer-events: none;
         }
         .seat:hover::before {
-            content: attr(title);
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #000;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 10;
+        content: attr(title);
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #000;
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 10;
         }
         .row-label {
-            display: inline-block;
-            width: 40px;
-            text-align: center;
-            margin-right: 5px;
-            font-weight: bold;
-            font-size: 16px;
+        display: inline-block;
+        width: 40px;
+        text-align: center;
+        margin-right: 5px;
+        font-weight: bold;
+        font-size: 16px;
         }
         .seat-row {
-            text-align: center;
-            margin-bottom: 30px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 30px;
         }
         .seat-row-divider {
-            text-align: center;
-    height: 50px;
-    background-color: #dee2e6;
-    margin: 20px 0;
+        text-align: center;
+        height: 50px;
+        background-color: #f08080;
+        margin: 20px 0;
+        }
+        .seat-floor{
+           background-color: #f08080;
         }
         .screen-ui {
-            display: flex;
-            justify-content: center;
-            margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
         }
         .screen-ui .screen {
-            width: 100%;
-            height: 80px;
-            background-color: #343a40;
-            color: #fff;
-            text-align: center;
-            line-height: 80px;
-            border-radius: 5px;
-            position: relative;
-            margin-bottom: 2rem;
-            font-size: 20px;
+        width: 100%;
+        height: 80px;
+        background-color: #343a40;
+        color: #fff;
+        text-align: center;
+        line-height: 80px;
+        border-radius: 5px;
+        position: relative;
+        margin-bottom: 2rem;
+        font-size: 20px;
         }
         .modal-content {
-            padding: 20px;
-            border-radius: 8px;
+        padding: 20px;
+        border-radius: 8px;
         }
         .modal-header {
-            border-bottom: none;
+        border-bottom: none;
         }
         .modal-body {
-            padding: 20px;
+        padding: 20px;
         }
-        .staircase-divider {
-    width: 0;
-    height: 60px;
-    border-left: 3px solid #007bff; 
-    border-bottom: 3px solid #007bff; 
-    margin-left: 40px; 
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateY(20px) rotate(-45deg); 
-    border-radius: 0 0 10px 10px; 
-    z-index: 1;
+        .seat-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        }
+        .row-label {
+        width: 30px;
+        text-align: right;
+        padding-right: 10px;
+        }
+        .seat-divider {
+   width: 70px;
+   height: 40px;
+   background-color: #ff9800;
+   margin: 0 10px;
+   position: relative;
+}
+.seat-divider .text-content{
+   text-align: center;
+   font-weight: bold;
+}
+.seat-row:not(:first-child) .seat-divider::before {
+   content: '';
+   position: absolute;
+   width: 70px;
+   height: 20px;
+   background-color: #ff9800;
+   left: 0;
+   top: -20px; 
 }
 
-        .seat-row > .seat-container {
-            position: relative;
-            display: inline-block;
-        }
-        .btn-group-toggle .btn {
-            border-radius: 20px;
-            margin: 2px;
-        }
-    </style>
+.seat-row:not(:last-child) .seat-divider::after {
+   content: '';
+   position: absolute;
+   width: 70px;
+   height: 20px;
+   background-color: #ff9800;
+   left: 0;
+}
+.seat-indicators {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 20px;
+   font-weight: bold;
+}
+
+.seat-indicator {
+   display: flex;
+   align-items: center;
+   margin: 2px 15px 20px 15px;
+   font-size: 16px;
+}
+.seat-staircase{
+   background-color: #ff9800;
+}
+     </style>
 </head>
 <body>
     <%@ include file="adminSidebar.jsp" %>
@@ -135,7 +168,28 @@
         <div class="screen-ui">
             <div class="screen">Screen</div>
         </div>
-        
+        <div class="seat-indicators">
+            <div class="seat-indicator">
+                <div class="seat available"></div>
+                <span>Available</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat unavailable"></div>
+                <span>Unavailable</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat selected"></div>
+                <span>Selected</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat seat-staircase"></div>
+                <span>Stairs</span>
+            </div>
+            <div class="seat-indicator">
+                <div class="seat seat-floor"></div>
+                <span>Floor</span>
+            </div>
+        </div>
         <div id="seat-layout">
             <%
                 Seats[] seats = (Seats[]) request.getAttribute("seats");
@@ -162,10 +216,13 @@
                         int seatIndex = rowCounter * seatsPerRow + j;
                         if (seatIndex < seats.length) {
                             Seats seat = seats[seatIndex];
-                            String seatClass = bookedSeatIds.contains(seat.getId()) ? "seat booked" : "seat empty";
+                            String seatClass = bookedSeatIds.contains(seat.getId()) ? "seat unavailable" : "seat available";
                             String seatHtml = String.format("<div class='%s' title='Seat %d'>%d</div>", seatClass, seat.getSeatNumber(), seat.getSeatNumber());
                             out.print(seatHtml);
                             index++;
+                        }
+                        if (!(rowCounter == numRows - 1) && (j + 1) % 5 == 0 && j != seatsPerRow - 1) {
+                            out.print("<div class='seat-divider'></div>");
                         }
                     }
                     out.print("</div>");
