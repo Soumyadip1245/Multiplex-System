@@ -60,7 +60,7 @@ public class OwnerController {
             model.addAttribute("multiplexes", response.getBody());
         }
         model.addAttribute("userName", user.getUsername());
-        return "ownerDashboard";
+        return "owner/ownerDashboard";
     }
 
     @PostMapping("/add-multiplex")
@@ -90,7 +90,7 @@ public class OwnerController {
         ResponseEntity<Screens[]> response1 = restTemplate.getForEntity(url1, Screens[].class);
         model.addAttribute("screens", response1.getBody());
 
-        return "manageOwnerMultiplex";
+        return "owner/manageOwnerMultiplex";
     }
 
     @PostMapping("/add-screen/{id}")
@@ -114,7 +114,7 @@ public class OwnerController {
         model.addAttribute("moviesList", responseMovie.getBody());
         model.addAttribute("seats", response.getBody());
         model.addAttribute("screenId", screenId);
-        return "seatScreen";
+        return "owner/seatScreen";
     }
 
     @GetMapping("/manage-movies")
@@ -122,7 +122,7 @@ public class OwnerController {
         String url = "http://localhost:3080/allMovies";
         ResponseEntity<Movies[]> response = restTemplate.getForEntity(url, Movies[].class);
         model.addAttribute("movies", response.getBody());
-        return "manageMovies";
+        return "owner/manageMovies";
     }
 
     @PostMapping("/add-movie")
@@ -169,7 +169,7 @@ public class OwnerController {
         ResponseEntity<Seats[]> response = restTemplate.getForEntity(url1, Seats[].class);
         model.addAttribute("seats", response.getBody());
         model.addAttribute("screenId", screenId);
-        return "seatScreen";
+        return "owner/seatScreen";
     }
 
     @PostMapping("/fetchAvailability")
@@ -182,7 +182,7 @@ public class OwnerController {
         String url1 = "http://localhost:3080/allMovies";
         ResponseEntity<Movies[]> response1 = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("movies", response1.getBody());
-        return "addShowtime";
+        return "owner/addShowtime";
     }
 
     @PostMapping("/addShowtime")
@@ -207,7 +207,7 @@ public class OwnerController {
         String url1 = "http://localhost:3080/allMovies";
         ResponseEntity<Movies[]> response1 = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("movies", response1.getBody());
-        return "manageBooking";
+        return "owner/manageBooking";
     }
     @PostMapping("/selectMovie")
     public String selectMovie(@RequestParam("movieId") long movieId, Model model) {
@@ -215,7 +215,7 @@ public class OwnerController {
         ResponseEntity<Multiplexes[]> response = restTemplate.getForEntity(url, Multiplexes[].class);
         model.addAttribute("multiplexes", response.getBody());
         model.addAttribute("movieId",movieId);
-        return "selectMultiplex";
+        return "owner/selectMultiplex";
     }
     @PostMapping("/selectShowtime")
     public String selectShowtime(@RequestParam("multiplexId") long multiplexId,@RequestParam("showDate")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate showDate, @RequestParam("showTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)  LocalTime showTime, @RequestParam("movieId") long movieId, Model model, HttpSession session) {
@@ -234,7 +234,7 @@ public class OwnerController {
        model.addAttribute("movieId", movieId);
        model.addAttribute("userId",user.getId());
        model.addAttribute("screenId",response.getBody().getScreenId());
-       return "bookSeats";
+       return "owner/bookSeats";
     }
     @GetMapping("/billBooking/{id}")
     public String invoiceGenerator(@PathVariable("id") long id,Model model) {
@@ -243,7 +243,7 @@ public class OwnerController {
         model.addAttribute("bookings",response.getBody());
         String encodedUrl = "http://localhost:8080/owner/billBooking/"+id;
         model.addAttribute("encodedUrl",encodedUrl);
-        return "billBooking";
+        return "owner/billBooking";
     }
     
     @GetMapping("/manage-shows/{id}")
@@ -255,7 +255,7 @@ public class OwnerController {
         ResponseEntity<Movies[]> response1 = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("movies", response1.getBody());
         model.addAttribute("screenId",id);
-        return "manageShows";
+        return "owner/manageShows";
     }
     
     @PostMapping("/load-timings")
@@ -265,18 +265,18 @@ public class OwnerController {
         model.addAttribute("movieTime",response.getBody()); 
         model.addAttribute("movieId", movieId);
         model.addAttribute("showDate", showDate);
-        return "loadTimings";
+        return "owner/loadTimings";
     }
     
     @GetMapping("/reports")
     public String loadReports(){
-        return "viewReports";
+        return "owner/viewReports";
     }
     @PostMapping("/get-report")
     public String getReport(@RequestParam("showDate") LocalDate date, Model model) {
         ResponseEntity<Bookings[]> response = restTemplate.getForEntity("http://localhost:3080/reports/"+date, Bookings[].class);
         model.addAttribute("bookings", response.getBody());
-        return "viewReports";
+        return "owner/viewReports";
     }
     @GetMapping("/manage-users")
     public String manageUsers(Model model) {
@@ -286,7 +286,7 @@ public class OwnerController {
         model.addAttribute("multiplexes", response.getBody());
         ResponseEntity<Users[]> response1 = restTemplate.getForEntity("http://localhost:3080/getAdmins", Users[].class);
         model.addAttribute("users", response1.getBody());
-        return "manageUsers";
+        return "owner/manageUsers";
     }
     @PostMapping("/add-user")
     public String addUser(
@@ -308,7 +308,7 @@ public class OwnerController {
     public String manageVouchers(Model model) {
         ResponseEntity<Vouchers[]> response = restTemplate.getForEntity("http://localhost:3080/getAllVouchers", Vouchers[].class);
         model.addAttribute("vouchers", response.getBody());
-        return "addVoucher";
+        return "owner/addVoucher";
     }
     @PostMapping("/add-voucher")
     public String addVoucher(@RequestParam String type,

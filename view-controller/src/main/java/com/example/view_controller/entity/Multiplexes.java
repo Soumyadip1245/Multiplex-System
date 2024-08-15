@@ -42,5 +42,6 @@ public class Multiplexes {
         joinColumns = @JoinColumn(name = "multiplex_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonIgnore
     private List<Users> admins;
 }

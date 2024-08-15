@@ -41,4 +41,5 @@ public interface MultiplexService {
     List<Bookings> showReports(LocalDate date);
     List<Users> getAllAdmins();
     List<Multiplexes> findByAdminId(long adminId);
+    List<Bookings> findByUserId(long userId);
 }   

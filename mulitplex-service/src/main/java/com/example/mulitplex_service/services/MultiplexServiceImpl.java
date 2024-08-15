@@ -596,6 +596,11 @@ public class MultiplexServiceImpl implements MultiplexService {
     @Override
     public List<Multiplexes> findByAdminId(long adminId) {
         return multiplexRepository.findByAdminId(adminId);
+    }
+
+    @Override
+    public List<Bookings> findByUserId(long userId) {
+        return bookingRepository.findBookingsForUser(userId);
 
     }
     public String sendSimpleMailCoupon(long userVoucher, long bookingId) {

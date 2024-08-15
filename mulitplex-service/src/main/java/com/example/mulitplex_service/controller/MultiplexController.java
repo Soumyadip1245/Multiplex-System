@@ -185,6 +185,11 @@ public class MultiplexController {
         List<Multiplexes> r = multiplexService.findByAdminId(id);
         return new ResponseEntity<>(r,HttpStatus.OK);
     }
+    @GetMapping("/getBookingsForUser/{id}")
+    public ResponseEntity<List<Bookings>> getBookingsForUser(@PathVariable("id") long id) {
+        List<Bookings> r = multiplexService.findByUserId(id);
+        return new ResponseEntity<>(r,HttpStatus.OK);
+    }
     
     @PostMapping("/createVoucher")
     public ResponseEntity<Vouchers> createVouchers(@RequestBody Vouchers voucher) {

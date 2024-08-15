@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-    <%@ include file="./admin/adminSidebar.jsp" %>
+    <%@ include file="adminSidebar.jsp" %>
     <div class="container">
         <h1 class="mt-5">Manage Multiplexes</h1>
         <p>Here you can manage all the multiplexes.</p>

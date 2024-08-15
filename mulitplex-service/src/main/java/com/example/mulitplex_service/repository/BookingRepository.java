@@ -21,4 +21,8 @@ public interface BookingRepository extends JpaRepository<Bookings, Long> {
 
     @Query("SELECT b FROM Bookings b JOIN b.showtime s WHERE s.showDate = :showDate")
     List<Bookings> findAllByShowDate(LocalDate showDate);
+
+    @Query(value = "SELECT b FROM Bookings b WHERE b.user.id = :userId ORDER BY b.bookingDate DESC")
+    List<Bookings> findBookingsForUser(@Param("userId") long userId);
+
 }

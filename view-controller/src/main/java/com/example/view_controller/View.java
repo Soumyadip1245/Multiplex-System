@@ -20,12 +20,12 @@ public class View {
 
     @GetMapping("/")
     public String home() {
-        return "login";
+        return "common/login";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "common/login";
     }
     @GetMapping("/logout")
     public String logout(HttpSession session){
@@ -37,7 +37,7 @@ public class View {
         Users u = userService.loginUser(username, password);
         if (u == null) {
             model.addAttribute("error", "User not found with the provided credentials");
-            return "login";
+            return "common/login";
         } else {
             System.out.println(u.toString());
             session.setAttribute("user", u);
@@ -55,7 +55,7 @@ public class View {
 
     @GetMapping("/register")
     public String register(Model model) {
-        return "register";
+        return "common/register";
     }
 
     @PostMapping("/register")
@@ -65,11 +65,11 @@ public class View {
         user.setPassword(password);
         user.setEmail(email);
         userService.registerUser(user);
-        return "login";
+        return "common/login";
     }
 
     @GetMapping("/access-denied")
     public String accessDenied() {
-        return "access-denied"; 
+        return "common/access-denied"; 
     }
 }

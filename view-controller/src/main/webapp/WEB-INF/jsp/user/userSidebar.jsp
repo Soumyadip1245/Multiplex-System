@@ -66,7 +66,7 @@
         <button class="navbar-toggler" type="button" onclick="toggleSidebar()" style="display: block;">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <a class="navbar-brand" href="#">User Dashboard</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -79,12 +79,8 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
-        <a href="/admin/dashboard">Dashboard</a>
-        <a href="/admin/dashboard">Manage Multiplexes</a>
-        <a href="/admin/manage-movies">Manage Movies</a>
-        <a href="/admin/manage-bookings">Manage Bookings</a>
-        <a href="/admin/reports">Reports</a>
-        <a href="/logout">Logout</a>
+        <a href="/user/dashboard">Dashboard</a>
+        <a href="/user/manage-bookings">Manage Bookings</a>
     </div>
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
