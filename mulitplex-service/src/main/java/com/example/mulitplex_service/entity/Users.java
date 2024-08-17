@@ -25,7 +25,7 @@ public class Users {
     private String username;
     private String password;
     private String email;
-
+    private String membershipType = "NONE"; //PLATINUM, GOLD
     private String role = "USER";
 
     private LocalDateTime createdAt;
@@ -43,6 +43,7 @@ public class Users {
     private List<Multiplexes> adminMultiplexes;
     @OneToMany(mappedBy = "user")
     private List<UserVouchers> userVouchers;
+    private LocalDateTime membershipEnds;
     public enum Role {
         USER, ADMIN, OWNER
     }

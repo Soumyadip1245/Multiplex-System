@@ -199,6 +199,7 @@ public class AdminController {
        System.out.println(url);
        Users user = (Users) session.getAttribute("user");
        ResponseEntity<SeatsBooked> response = restTemplate.getForEntity(url, SeatsBooked.class);
+       model.addAttribute("membershipType",user.getMembershipType());
        model.addAttribute("bookedSeats",response.getBody().getBookedSeats());
        model.addAttribute("seats",response.getBody().getAllSeats());
        model.addAttribute("showtimeId",response.getBody().getShowtimeId());

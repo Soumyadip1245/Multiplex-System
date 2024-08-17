@@ -42,4 +42,5 @@ public interface MultiplexService {
     List<Users> getAllAdmins();
     List<Multiplexes> findByAdminId(long adminId);
     List<Bookings> findByUserId(long userId);
+    Users updateMembership(Long userId, String membership);
 }   

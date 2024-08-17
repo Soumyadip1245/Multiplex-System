@@ -55,6 +55,7 @@ public class UserController {
        System.out.println(url);
        Users user = (Users) session.getAttribute("user");
        ResponseEntity<SeatsBooked> response = restTemplate.getForEntity(url, SeatsBooked.class);
+       model.addAttribute("membershipType",user.getMembershipType());
        model.addAttribute("bookedSeats",response.getBody().getBookedSeats());
        model.addAttribute("seats",response.getBody().getAllSeats());
        model.addAttribute("showtimeId",response.getBody().getShowtimeId());
@@ -88,6 +89,15 @@ public class UserController {
             model.addAttribute("bookings", response.getBody());
         }
         return "user/viewReport";
+    }
+    
+    @GetMapping("/membership")
+    public String loadMembership(Model model){
+        var user = (Users) session.getAttribute("user");
+        System.out.print(user.getMembershipType());
+        model.addAttribute("membershipType",user.getMembershipType());
+        model.addAttribute("userId",user.getId());
+        return "user/membershipPage";
     }
     
 }

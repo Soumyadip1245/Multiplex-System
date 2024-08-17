@@ -80,7 +80,9 @@
     <div class="sidebar" id="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
         <a href="/user/dashboard">Dashboard</a>
+        <a href="/user/membership">Membership</a>
         <a href="/user/manage-bookings">Manage Bookings</a>
+        <a href="/logout">Logout</a>
     </div>
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 

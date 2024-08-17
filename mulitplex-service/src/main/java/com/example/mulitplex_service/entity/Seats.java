@@ -24,7 +24,8 @@ public class Seats {
     private Integer rowNum; 
     private Integer seatNumber;
     private LocalDateTime createdAt;
-
+    private boolean isGold = false;
+    private boolean isPlatinum = false;
     @ManyToOne
     @JoinColumn(name = "screen_id")
     @JsonIgnore

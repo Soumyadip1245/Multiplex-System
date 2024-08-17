@@ -128,6 +128,18 @@ public class MultiplexServiceImpl implements MultiplexService {
                 seat.setRowNum(rowNum);
                 seat.setSeatNumber(seatNum);
                 seat.setScreen(screen);
+                if (rowNum == numberOfRows - 1) { // 2nd last row
+                    if (seatNum <= 4) { 
+                        seat.setPlatinum(true);
+                        seat.setGold(false);
+                    } else {
+                        seat.setGold(true);
+                        seat.setPlatinum(false);
+                    }
+                } else {
+                    seat.setGold(false);
+                    seat.setPlatinum(false);
+                }
                 seats.add(seat);
             }
         }
@@ -314,7 +326,6 @@ public class MultiplexServiceImpl implements MultiplexService {
         } else {
             throw new IllegalArgumentException("Invalid type for totalPrice");
         }
-    
         // Parse bookingDate
         bookings.setBookingDate(LocalDateTime.parse((String) payload.get("bookingDate")));
     
@@ -677,5 +688,26 @@ public class MultiplexServiceImpl implements MultiplexService {
                 "    </table>" +
                 "</body>" +
                 "</html>";
+    }
+
+    @Override
+    public Users updateMembership(Long userId, String membership) {
+        Users u = userRepository.findById(userId).orElse(null);
+        u.setMembershipType(membership);
+        u.setMembershipEnds(LocalDateTime.now().plusMonths(1));
+        return userRepository.save(u);
+       
+    }
+    @Scheduled(fixedRate = 4500000) 
+    public void checkExpiredMemberships() {
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Users> usersWithExpiredMemberships = userRepository.findByMembershipEndsBeforeAndMembershipTypeNot(now, "NONE");
+
+        for (Users user : usersWithExpiredMemberships) {
+            user.setMembershipType("NONE");
+            user.setMembershipEnds(null);
+            userRepository.save(user);
+        }
     }
 }

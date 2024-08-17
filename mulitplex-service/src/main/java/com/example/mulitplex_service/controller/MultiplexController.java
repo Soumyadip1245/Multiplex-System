@@ -208,5 +208,10 @@ public class MultiplexController {
         return new ResponseEntity<VoucherResponse>(message,HttpStatus.OK);
     }
     
+    @GetMapping("/updateMembership/{id}/{membership}")
+    public ResponseEntity<Users> updateMembership(@PathVariable("id") long userId, @PathVariable("membership") String membershipType){
+        Users u = multiplexService.updateMembership(userId, membershipType);
+        return new ResponseEntity<>(u,HttpStatus.OK);
+    }
     
 }

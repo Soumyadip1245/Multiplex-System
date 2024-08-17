@@ -154,6 +154,15 @@
 .seat-staircase{
    background-color: #ff9800;
 }
+.seat.gold {
+    background-color: gold;
+    color: black;
+}
+
+.seat.platinum {
+    background-color: #a0a09e; /* Platinum-like color */
+    color: white;
+}
      </style>
 </head>
 <body>
@@ -216,7 +225,15 @@
                         int seatIndex = rowCounter * seatsPerRow + j;
                         if (seatIndex < seats.length) {
                             Seats seat = seats[seatIndex];
-                            String seatClass = bookedSeatIds.contains(seat.getId()) ? "seat unavailable" : "seat available";
+                            String seatClass = "seat available";
+                
+                if (bookedSeatIds.contains(seat.getId())) {
+                    seatClass = "seat unavailable";
+                } else if (seat.isGold()) {
+                    seatClass = "seat gold";
+                } else if (seat.isPlatinum()) {
+                    seatClass = "seat platinum";
+                }
                             String seatHtml = String.format("<div class='%s' title='Seat %d'>%d</div>", seatClass, seat.getSeatNumber(), seat.getSeatNumber());
                             out.print(seatHtml);
                             index++;

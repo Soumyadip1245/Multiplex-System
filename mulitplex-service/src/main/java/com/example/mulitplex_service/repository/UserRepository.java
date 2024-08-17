@@ -1,5 +1,6 @@
 package com.example.mulitplex_service.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import com.example.mulitplex_service.entity.Users;
 public interface UserRepository extends JpaRepository<Users, Long>{
     @Query(value = "CALL GetAdmins()", nativeQuery = true)
     List<Users> findAdmins();
+    @Query("SELECT u FROM Users u WHERE u.membershipEnds < :now AND u.membershipType <> :membershipType")
+     List<Users> findByMembershipEndsBeforeAndMembershipTypeNot(LocalDateTime now, String membershipType);
 }
