@@ -21,6 +21,7 @@
         position: relative;
         border-radius: 4px;
         transition: background-color 0.3s, transform 0.3s;
+        z-index: 1;
         }
         .seat:hover {
         transform: scale(1.1);
@@ -65,11 +66,11 @@
         .seat-row-divider {
         text-align: center;
         height: 50px;
-        background-color: #f08080;
+        background-color: #ffffff;
         margin: 20px 0;
         }
         .seat-floor{
-           background-color: #f08080;
+           background-color: #ffffff;
         }
         .screen-ui {
         display: flex;
@@ -111,9 +112,10 @@
         .seat-divider {
    width: 70px;
    height: 40px;
-   background-color: #ff9800;
+   background-color: #ffffff;
    margin: 0 10px;
    position: relative;
+   z-index: -1;
 }
 .seat-divider .text-content{
    text-align: center;
@@ -124,7 +126,7 @@
    position: absolute;
    width: 70px;
    height: 20px;
-   background-color: #ff9800;
+   background-color: #ffffff;
    left: 0;
    top: -20px; 
 }
@@ -134,7 +136,7 @@
    position: absolute;
    width: 70px;
    height: 20px;
-   background-color: #ff9800;
+   background-color: #ffffff;
    left: 0;
 }
 .seat-indicators {
@@ -152,16 +154,16 @@
    font-size: 16px;
 }
 .seat-staircase{
-   background-color: #ff9800;
+   background-color: #ffffff;
 }
 .seat.gold {
-    background-color: gold;
-    color: black;
+   background-color: gold;
+   color: black;
 }
 
 .seat.platinum {
-    background-color: #a0a09e; /* Platinum-like color */
-    color: white;
+   background-color: #a0a09e; 
+   color: white;
 }
      </style>
 </head>
@@ -191,13 +193,14 @@
                 <span>Selected</span>
             </div>
             <div class="seat-indicator">
-                <div class="seat seat-staircase"></div>
-                <span>Stairs</span>
+                <div class="seat gold"></div>
+                <span>Gold Reserved</span>
             </div>
             <div class="seat-indicator">
-                <div class="seat seat-floor"></div>
-                <span>Floor</span>
+                <div class="seat platinum"></div>
+                <span>Platinum Reserved</span>
             </div>
+          
         </div>
         <div id="seat-layout">
             <%
@@ -238,13 +241,25 @@
                             out.print(seatHtml);
                             index++;
                         }
-                        if (!(rowCounter == numRows - 1) && (j + 1) % 5 == 0 && j != seatsPerRow - 1) {
+                        if ((j == 3 || j == 11) && !(rowCounter == numRows - 1)) {
                             out.print("<div class='seat-divider'></div>");
                         }
                     }
                     out.print("</div>");
+                    if (rowCounter == 4 || rowCounter == 7 || rowCounter == numRows - 2) {
+                        String sectionLabel = "";
+                        if (rowCounter == 4) {
+                            sectionLabel = "Normal Seats";
+                        } else if (rowCounter == 7) {
+                            sectionLabel = "Premium Seats";
+                        } else {
+                            sectionLabel = "Recliners";
+                        }
+                        out.print("<h4 class='text-center'>" + sectionLabel + "</h4>");
+                    }
+            
                     if (rowCounter == numRows - 2) {
-                        out.print("<div class='seat-row-divider'></div>");
+                        out.print("<div class='seat-divider'></div>");
                     }
                     rowLabel++;
                     rowCounter++;

@@ -135,7 +135,7 @@
                 "description": "Confirm your membership purchase",
                 "handler": function (response) {
                     document.getElementById('loader').style.display = 'flex';
-                    var confirmUrl = "http://MULTIPLEX-SERVICE/updateMembership/"+userId+"/"+membershipType;
+                    var confirmUrl = "http://localhost:8080/updateMembership/"+userId+"/"+membershipType;
                     console.log(confirmUrl)
                     
                     fetch(confirmUrl, {

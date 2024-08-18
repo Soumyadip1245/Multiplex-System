@@ -398,7 +398,7 @@
                      var userId = seatElement.getAttribute('data-user-id');
                      var url = seatId + "/" + showDate + "/" + showTime + "/" + movieId + "/" + screenId + "/" + userId;
          
-                     fetch("http://MULTIPLEX-SERVICE/click/" + url)
+                     fetch("http://localhost:8080/click/" + url)
                          .then(response => response.text())
                          .then(data => {
                              if (data === 'Seat selected successfully.') {
@@ -434,7 +434,7 @@
                      var userId = seatElement.getAttribute('data-user-id');
                      var url = seatId + "/" + showDate + "/" + showTime + "/" + movieId + "/" + screenId + "/" + userId;
          
-                     fetch("http://MULTIPLEX-SERVICE/click/" + url)
+                     fetch("http://localhost:8080/click/" + url)
                          .then(response => response.text())
                          .then(data => {
                              if (data === 'Seat selected successfully.') {
@@ -470,7 +470,7 @@
                      var userId = seatElement.getAttribute('data-user-id');
                      var url = seatId + "/" + showDate + "/" + showTime + "/" + movieId + "/" + screenId + "/" + userId;
          
-                     fetch("http://MULTIPLEX-SERVICE/click/" + url)
+                     fetch("http://localhost:8080/click/" + url)
                          .then(response => response.text())
                          .then(data => {
                              if (data === 'Seat selected successfully.') {
@@ -525,7 +525,7 @@
          const amountElement = document.getElementById('amount');
          const totalAmountElement = document.getElementById('total-price');
          const priceMain = document.getElementById("price-main")
-         fetch(`http://MULTIPLEX-SERVICE/voucher-status/`+voucherCode)
+         fetch(`http://localhost:8080/voucher-status/`+voucherCode)
          .then(response => response.json())
          .then(data => {
          console.log(data)
@@ -565,7 +565,7 @@
          
                      "handler": function (response) {
                          document.getElementById('loader').style.display = 'flex';
-                         var confirmUrl = "http://MULTIPLEX-SERVICE/createBooking";
+                         var confirmUrl = "http://localhost:8080/createBooking";
                          var payload = {
                              totalPrice: parseFloat(finalAmountPriceTotal),
                              bookingDate: selectedElements[0].getAttribute('data-show-date') + 'T' + selectedElements[0].getAttribute('data-show-time'),

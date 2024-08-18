@@ -56,9 +56,17 @@ public class LoadBalancingController {
         
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/getAvailableTimeSlots/{screenId}/{date}")
+    @GetMapping("/get-available-time-slots/{screenId}/{date}")
     public ResponseEntity<String> getAvailableTimeSlots(@PathVariable String screenId, @PathVariable String date) {
         String multiplexUrl = String.format("http://MULTIPLEX-SERVICE/get-available-time-slots/%s/%s", screenId, date);
+        
+        String response = restTemplate.getForObject(multiplexUrl, String.class);
+        
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/updateMembership/{userId}/{membershipType}")
+    public ResponseEntity<String> getAvailableTimeSlots(@PathVariable long userId, @PathVariable String membershipType) {
+        String multiplexUrl = String.format("http://MULTIPLEX-SERVICE/updateMembership/"+userId+"/"+membershipType);
         
         String response = restTemplate.getForObject(multiplexUrl, String.class);
         

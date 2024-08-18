@@ -19,7 +19,7 @@ public class Movies {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String synopsis;
     private String cast;
     private String trailerUrl;
