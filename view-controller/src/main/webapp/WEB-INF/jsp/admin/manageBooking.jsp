@@ -116,7 +116,7 @@
                             button.addEventListener('click', function () {
                                 const movieId = this.getAttribute('data-movie-id');
                                 document.getElementById('movieId').value = movieId;
-                                fetch(`http://localhost:3080/findAllShowtimesByMovieId/` + movieId)
+                                fetch(`http://MULTIPLEX-SERVICE/findAllShowtimesByMovieId/` + movieId)
                                     .then(response => response.json())
                                     .then(data => {
                                         const showDateSelect = document.getElementById('showDate');

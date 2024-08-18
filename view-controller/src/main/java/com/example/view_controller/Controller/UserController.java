@@ -32,7 +32,7 @@ public class UserController {
     private HttpSession session;
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        String url1 = "http://localhost:3080/allMovies";
+        String url1 = "http://MULTIPLEX-SERVICE/allMovies";
         ResponseEntity<Movies[]> response1 = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("movies", response1.getBody());
         return "user/manageBooking";
@@ -41,7 +41,7 @@ public class UserController {
 
     @PostMapping("/load-timings")
     public String loadTimings(@RequestParam("showDate") LocalDate showDate, @RequestParam("movieId") Long movieId, Model model ) {
-        String url = "http://localhost:3080/findshowbyMovieIdandDate/"+movieId+"/"+showDate;
+        String url = "http://MULTIPLEX-SERVICE/findshowbyMovieIdandDate/"+movieId+"/"+showDate;
         ResponseEntity<MovieTime[]> response = restTemplate.getForEntity(url, MovieTime[].class); 
         model.addAttribute("movieTime",response.getBody()); 
         model.addAttribute("movieId", movieId);
@@ -51,7 +51,7 @@ public class UserController {
      @PostMapping("/selectShowtime")
     public String selectShowtime(@RequestParam("multiplexId") long multiplexId,@RequestParam("showDate")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate showDate, @RequestParam("showTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)  LocalTime showTime, @RequestParam("movieId") long movieId, Model model, HttpSession session) {
        System.out.print("Multiplex Id: "+ multiplexId + " Show Date: "+showDate+" Show Time: "+showTime+ " Movie Id: "+movieId);
-       String url = "http://localhost:3080/makeBookingLoadSeats/"+multiplexId+"/"+movieId+"/"+showDate+"/"+showTime;
+       String url = "http://MULTIPLEX-SERVICE/makeBookingLoadSeats/"+multiplexId+"/"+movieId+"/"+showDate+"/"+showTime;
        System.out.println(url);
        Users user = (Users) session.getAttribute("user");
        ResponseEntity<SeatsBooked> response = restTemplate.getForEntity(url, SeatsBooked.class);
@@ -70,7 +70,7 @@ public class UserController {
     }
       @GetMapping("/billBooking/{id}")
     public String invoiceGenerator(@PathVariable("id") long id,Model model) {
-        String url = "http://localhost:3080/getBookingById/"+id;
+        String url = "http://MULTIPLEX-SERVICE/getBookingById/"+id;
         ResponseEntity<Bookings> response = restTemplate.getForEntity(url, Bookings.class);
         model.addAttribute("bookings",response.getBody());
         String encodedUrl = "http://localhost:8080/owner/billBooking/"+id;
@@ -82,7 +82,7 @@ public class UserController {
     public String manageBooking(Model model) {
         var user = (Users) session.getAttribute("user");
         if (user.getId() > 0) {
-            String url = "http://localhost:3080/getBookingsForUser/" + user.getId();
+            String url = "http://MULTIPLEX-SERVICE/getBookingsForUser/" + user.getId();
             System.out.println(url);
             ResponseEntity<Bookings[]> response = restTemplate.getForEntity(url, Bookings[].class);
             System.out.println(response.getBody());

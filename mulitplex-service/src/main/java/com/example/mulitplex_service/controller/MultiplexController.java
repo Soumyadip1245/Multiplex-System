@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,8 @@ public class MultiplexController {
     private MultiplexService multiplexService;
     @Autowired
     private VoucherService voucherService;
-
+    @Autowired
+    private Environment environment;
     @PostMapping("/add-multiplex/{id}")
     public ResponseEntity<Void> addMultiplex(@RequestBody Multiplexes m, @PathVariable("id") long ownerId) {
         System.out.println(m.toString());
@@ -212,6 +214,10 @@ public class MultiplexController {
     public ResponseEntity<Users> updateMembership(@PathVariable("id") long userId, @PathVariable("membership") String membershipType){
         Users u = multiplexService.updateMembership(userId, membershipType);
         return new ResponseEntity<>(u,HttpStatus.OK);
+    }
+    @GetMapping("/multiplex-logs/{id}")
+    public String getMultiplexOwner(@PathVariable Long id) {
+        return "Handled by instance running on port: " + environment.getProperty("local.server.port");
     }
     
 }

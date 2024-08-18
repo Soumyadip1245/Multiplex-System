@@ -47,7 +47,7 @@ public class AdminController {
     public String dashboard(Model model) {
         var user = (Users) session.getAttribute("user");
         if (user.getId() > 0) {
-            String url = "http://localhost:3080/getAllMultiplexesByAdminId/" + user.getId();
+            String url = "http://MULTIPLEX-SERVICE/getAllMultiplexesByAdminId/" + user.getId();
             System.out.println(url);
             ResponseEntity<Multiplexes[]> response = restTemplate.getForEntity(url, Multiplexes[].class);
             System.out.println(response.getBody());
@@ -59,12 +59,12 @@ public class AdminController {
 
      @GetMapping("manage-multiplex/{id}")
     public String openManage(@PathVariable("id") long multiplexId, Model model) {
-        String url = "http://localhost:3080/get-multiplex/" + multiplexId;
+        String url = "http://MULTIPLEX-SERVICE/get-multiplex/" + multiplexId;
         System.out.println(url);
         ResponseEntity<Multiplexes> response = restTemplate.getForEntity(url, Multiplexes.class);
         System.out.println(response.getBody());
         model.addAttribute("multiplex", response.getBody());
-        String url1 = "http://localhost:3080/screen-multiplex/" + multiplexId;
+        String url1 = "http://MULTIPLEX-SERVICE/screen-multiplex/" + multiplexId;
         System.out.println(url1);
         model.addAttribute("multiplexId", multiplexId);
         ResponseEntity<Screens[]> response1 = restTemplate.getForEntity(url1, Screens[].class);
@@ -79,15 +79,15 @@ public class AdminController {
         Screens screen = new Screens();
         screen.setName(screenName);
         screen.setCapacity(Integer.parseInt(screenCapacity));
-        String url = "http://localhost:3080/add-screen/" + multiplexId;
+        String url = "http://MULTIPLEX-SERVICE/add-screen/" + multiplexId;
         ResponseEntity<Void> response = restTemplate.postForEntity(url, screen, Void.class);
         return "redirect:/admin/manage-multiplex/" + multiplexId;
     }
     @GetMapping("/screen-seats/{id}")
     public String screenSeats(@PathVariable("id") long screenId, Model model) {
-        String url = "http://localhost:3080/seats-screen/" + screenId;
+        String url = "http://MULTIPLEX-SERVICE/seats-screen/" + screenId;
         ResponseEntity<Seats[]> response = restTemplate.getForEntity(url, Seats[].class);
-        String url1 = "http://localhost:3080/allMovies";
+        String url1 = "http://MULTIPLEX-SERVICE/allMovies";
         ResponseEntity<Movies[]> responseMovie = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("moviesList", responseMovie.getBody());
         model.addAttribute("seats", response.getBody());
@@ -101,10 +101,10 @@ public class AdminController {
             @RequestParam("screenId") long screenId,
             Model model) {
         System.out.println("Booking Date: " + date + " Booking Time: " + time + " ScreenId: " + screenId);
-        String url = "http://localhost:3080/get-bookedseats/" + screenId + "/" + date + "/" + time;
+        String url = "http://MULTIPLEX-SERVICE/get-bookedseats/" + screenId + "/" + date + "/" + time;
         ResponseEntity<Seats[]> listSeats = restTemplate.getForEntity(url, Seats[].class);
         model.addAttribute("bookedSeats", listSeats.getBody());
-        String url1 = "http://localhost:3080/seats-screen/" + screenId;
+        String url1 = "http://MULTIPLEX-SERVICE/seats-screen/" + screenId;
         ResponseEntity<Seats[]> response = restTemplate.getForEntity(url1, Seats[].class);
         model.addAttribute("seats", response.getBody());
         model.addAttribute("screenId", screenId);
@@ -112,10 +112,10 @@ public class AdminController {
     }
      @GetMapping("/manage-shows/{id}")
     public String manageShows(@PathVariable("id") long id, Model model) {
-        String url = "http://localhost:3080/getAllScreenId/"+id;
+        String url = "http://MULTIPLEX-SERVICE/getAllScreenId/"+id;
         ResponseEntity<Showtimes[]> response = restTemplate.getForEntity(url, Showtimes[].class);
         model.addAttribute("allShows",response.getBody());
-        String url1 = "http://localhost:3080/allMovies";
+        String url1 = "http://MULTIPLEX-SERVICE/allMovies";
         ResponseEntity<Movies[]> response1 = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("movies", response1.getBody());
         model.addAttribute("screenId",id);
@@ -133,14 +133,14 @@ public class AdminController {
         showtime.setShowDate(showDate);
         showtime.setShowTime(showTime);
         showtime.setPrice(basePrice);
-        String url = "http://localhost:3080/add-showtime/" + screenId + "/" + movieId;
+        String url = "http://MULTIPLEX-SERVICE/add-showtime/" + screenId + "/" + movieId;
         ResponseEntity<Showtimes> response = restTemplate.postForEntity(url, showtime, Showtimes.class);
         return "redirect:/admin/manage-shows/" + screenId;
     }
 
     @GetMapping("/manage-movies")
     public String manageMovies(Model model) {
-        String url = "http://localhost:3080/allMovies";
+        String url = "http://MULTIPLEX-SERVICE/allMovies";
         ResponseEntity<Movies[]> response = restTemplate.getForEntity(url, Movies[].class);
         model.addAttribute("movies", response.getBody());
         return "admin/manageMovies";
@@ -170,14 +170,14 @@ public class AdminController {
         movie.setCreatedAt(LocalDateTime.now());
         movie.setImageUrl(imgUrl);
         movie.setImdbId(imdbId);
-        String url = "http://localhost:3080/add-movie";
+        String url = "http://MULTIPLEX-SERVICE/add-movie";
         ResponseEntity<Movies> response = restTemplate.postForEntity(url, movie, Movies.class);
 
         return "redirect:/admin/manage-movies";
     }
     @GetMapping("/manage-bookings")
     public String manageBooking(Model model) {
-        String url1 = "http://localhost:3080/allMovies";
+        String url1 = "http://MULTIPLEX-SERVICE/allMovies";
         ResponseEntity<Movies[]> response1 = restTemplate.getForEntity(url1, Movies[].class);
         model.addAttribute("movies", response1.getBody());
         return "admin/manageBooking";
@@ -185,7 +185,7 @@ public class AdminController {
 
     @PostMapping("/load-timings")
     public String loadTimings(@RequestParam("showDate") LocalDate showDate, @RequestParam("movieId") Long movieId, Model model ) {
-        String url = "http://localhost:3080/findshowbyMovieIdandDate/"+movieId+"/"+showDate;
+        String url = "http://MULTIPLEX-SERVICE/findshowbyMovieIdandDate/"+movieId+"/"+showDate;
         ResponseEntity<MovieTime[]> response = restTemplate.getForEntity(url, MovieTime[].class); 
         model.addAttribute("movieTime",response.getBody()); 
         model.addAttribute("movieId", movieId);
@@ -195,7 +195,7 @@ public class AdminController {
      @PostMapping("/selectShowtime")
     public String selectShowtime(@RequestParam("multiplexId") long multiplexId,@RequestParam("showDate")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate showDate, @RequestParam("showTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)  LocalTime showTime, @RequestParam("movieId") long movieId, Model model, HttpSession session) {
        System.out.print("Multiplex Id: "+ multiplexId + " Show Date: "+showDate+" Show Time: "+showTime+ " Movie Id: "+movieId);
-       String url = "http://localhost:3080/makeBookingLoadSeats/"+multiplexId+"/"+movieId+"/"+showDate+"/"+showTime;
+       String url = "http://MULTIPLEX-SERVICE/makeBookingLoadSeats/"+multiplexId+"/"+movieId+"/"+showDate+"/"+showTime;
        System.out.println(url);
        Users user = (Users) session.getAttribute("user");
        ResponseEntity<SeatsBooked> response = restTemplate.getForEntity(url, SeatsBooked.class);
@@ -214,7 +214,7 @@ public class AdminController {
     }
      @GetMapping("/billBooking/{id}")
     public String invoiceGenerator(@PathVariable("id") long id,Model model) {
-        String url = "http://localhost:3080/getBookingById/"+id;
+        String url = "http://MULTIPLEX-SERVICE/getBookingById/"+id;
         ResponseEntity<Bookings> response = restTemplate.getForEntity(url, Bookings.class);
         model.addAttribute("bookings",response.getBody());
         String encodedUrl = "http://localhost:8080/owner/billBooking/"+id;
@@ -227,7 +227,7 @@ public class AdminController {
     }
     @PostMapping("/get-report")
     public String getReport(@RequestParam("showDate") LocalDate date, Model model) {
-        ResponseEntity<Bookings[]> response = restTemplate.getForEntity("http://localhost:3080/reports/"+date, Bookings[].class);
+        ResponseEntity<Bookings[]> response = restTemplate.getForEntity("http://MULTIPLEX-SERVICE/reports/"+date, Bookings[].class);
         model.addAttribute("bookings", response.getBody());
         return "admin/viewReports";
     }

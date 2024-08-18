@@ -132,7 +132,7 @@
             console.log(selectedDate,screenId)
             if (selectedDate) {
                 var timeId = "/"+screenId+"/"+selectedDate;
-                const url = "http://localhost:3080/get-available-time-slots"+timeId;
+                const url = "http://localhost:8080/get-available-time-slots"+timeId;
     
                 fetch(url)
                     .then(response => response.json())

@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.view_controller.entity.Users;
 import com.example.view_controller.service.user.UserService;
@@ -18,6 +19,9 @@ public class View {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @GetMapping("/")
     public String home() {
         return "common/login";
@@ -27,13 +31,15 @@ public class View {
     public String login() {
         return "common/login";
     }
+
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
     }
+
     @PostMapping("/login")
-    public String loginUser(@RequestParam String username, @RequestParam String password, Model model,HttpSession session) {
+    public String loginUser(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
         Users u = userService.loginUser(username, password);
         if (u == null) {
             model.addAttribute("error", "User not found with the provided credentials");
@@ -70,6 +76,9 @@ public class View {
 
     @GetMapping("/access-denied")
     public String accessDenied() {
-        return "common/access-denied"; 
+        return "common/access-denied";
     }
+
+   
+
 }
