@@ -35,6 +35,7 @@ import com.example.mulitplex_service.entity.Users;
 import com.example.mulitplex_service.entity.Vouchers;
 import com.example.mulitplex_service.repository.BookingDetailRepository;
 import com.example.mulitplex_service.repository.BookingRepository;
+import com.example.mulitplex_service.repository.JdbcSeatLogRepository;
 import com.example.mulitplex_service.repository.MovieRepository;
 import com.example.mulitplex_service.repository.MultiplexRepository;
 import com.example.mulitplex_service.repository.ScreenRepository;
@@ -75,6 +76,8 @@ public class MultiplexServiceImpl implements MultiplexService {
     private JavaMailSender javaMailSender;
     @Autowired
     private VoucherService voucherService;
+    @Autowired
+    private JdbcSeatLogRepository jdbcSeatLogRepository;
     @Autowired
     private UserVoucherRepository userVoucherRepository;
     @Value("${spring.mail.username}")
@@ -278,12 +281,13 @@ public class MultiplexServiceImpl implements MultiplexService {
     @Transactional
     @Override
     public String handleSeatClick(Long seatId, LocalDate showDate, LocalTime showTime, Long movieId, Long screenId, Long userId) {
-        Optional<SeatLog> existingSeatLogOpt = seatLogRepository.findBySeatIdAndShowDateAndShowTimeAndScreenIdAndMovieId(seatId, showDate, showTime, screenId, movieId);
+        System.out.print("Inside 4080");
+        Optional<SeatLog> existingSeatLogOpt = jdbcSeatLogRepository.findBySeatIdAndShowDateAndShowTimeAndScreenIdAndMovieId(seatId, showDate, showTime, screenId, movieId);
 
         if (existingSeatLogOpt.isPresent()) {
             SeatLog existingSeatLog = existingSeatLogOpt.get();
             if (existingSeatLog.getUserId().equals(userId)) {
-                seatLogRepository.deleteBySeatIdAndShowDateAndShowTimeAndUserIdAndScreenIdAndMovieId(seatId, showDate, showTime, screenId, movieId);
+                jdbcSeatLogRepository.deleteBySeatIdAndShowDateAndShowTimeAndScreenIdAndMovieId(seatId, showDate, showTime, screenId, movieId);
                 return "Seat unselected successfully.";
             } else {
                 return "Seat is already booked by another user.";
@@ -300,7 +304,7 @@ public class MultiplexServiceImpl implements MultiplexService {
             newSeatLog.setLockedAt(now);
             newSeatLog.setExpiresAt(now.plusMinutes(2));
 
-            seatLogRepository.save(newSeatLog);
+            jdbcSeatLogRepository.save(newSeatLog);
             return "Seat selected successfully.";
         }
     }
