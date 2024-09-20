@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 public class LoadBalancingController {
 
     @Autowired
-    @LoadBalanced
     private RestTemplate restTemplate;
 
     @PostMapping("/createBooking")

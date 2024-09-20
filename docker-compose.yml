@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db_docker
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin@123Admin@123
+      MYSQL_DATABASE: multiplex
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/sql-dump:/docker-entrypoint-initdb.d
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka_multiplex
+    environment:
+      SERVER_PORT: 8761
+    ports:
+      - "8761:8761"
+    depends_on:
+      - mysql
+  backend1:
+    build: ./mulitplex-service
+    container_name: backend_multiplex
+    environment:
+      SERVER_PORT: 3080
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: multiplex
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Admin@123Admin@123
+      EUREKA_HOST: eureka-server
+      RZP_KEY_ID: rzp_test_RYaOC10U6IjI9N
+      RZP_KEY_SECRET: 1FrgQAzBOwh2fyd0v7dVmoPS
+      RZP_CURRENCY: INR
+      RZP_COMPANY_NAME: MyCompany
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: bahubalicantlive@gmail.com
+      SPRING_MAIL_PASSWORD: hpogdeygcwiibhak
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+    ports:
+      - "3080:3080"
+    depends_on:
+      - mysql
+      - eureka-server
+  backend2:
+    build: ./multiplex-jdbc
+    container_name: backend1_multiplex
+    environment:
+      SERVER_PORT: 4080
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: multiplex
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Admin@123Admin@123
+      EUREKA_HOST: eureka-server
+      RZP_KEY_ID: rzp_test_RYaOC10U6IjI9N
+      RZP_KEY_SECRET: 1FrgQAzBOwh2fyd0v7dVmoPS
+      RZP_CURRENCY: INR
+      RZP_COMPANY_NAME: MyCompany
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: bahubalicantlive@gmail.com
+      SPRING_MAIL_PASSWORD: hpogdeygcwiibhak
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+    ports:
+      - "4080:4080"
+    depends_on:
+      - mysql
+      - eureka-server
+  frontend:
+    build: ./view-controller
+    container_name: frontend-multiplex
+    environment:
+      SERVER_PORT: 8080
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: multiplex
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Admin@123Admin@123
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - backend1
+volumes:
+  mysql_data:
