@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db_docker
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/sql-dump:/docker-entrypoint-initdb.d
+
+  eureka-server:
+    image: multiplexdocker/eureka-server:latest
+    container_name: eureka_multiplex
+    ports:
+      - "${EUREKA_SERVER_PORT}:8761"
+    depends_on:
+      - mysql
+
+  backend1:
+    image: multiplexdocker/backend1:latest
+    container_name: backend_multiplex
+    environment:
+      SERVER_PORT: ${BACKEND1_SERVER_PORT}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DB: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      EUREKA_HOST: ${EUREKA_HOST}
+      RZP_KEY_ID: ${RZP_KEY_ID}
+      RZP_KEY_SECRET: ${RZP_KEY_SECRET}
+      RZP_CURRENCY: ${RZP_CURRENCY}
+      RZP_COMPANY_NAME: ${RZP_COMPANY_NAME}
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+    ports:
+      - "${BACKEND1_SERVER_PORT}:3080"
+    depends_on:
+      - mysql
+      - eureka-server
+
+  backend2:
+    image: multiplexdocker/backend2:latest
+    container_name: backend1_multiplex
+    environment:
+      SERVER_PORT: ${BACKEND2_SERVER_PORT}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DB: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      EUREKA_HOST: ${EUREKA_HOST}
+      RZP_KEY_ID: ${RZP_KEY_ID}
+      RZP_KEY_SECRET: ${RZP_KEY_SECRET}
+      RZP_CURRENCY: ${RZP_CURRENCY}
+      RZP_COMPANY_NAME: ${RZP_COMPANY_NAME}
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+    ports:
+      - "${BACKEND2_SERVER_PORT}:4080"
+    depends_on:
+      - mysql
+      - eureka-server
+
+  frontend:
+    image: multiplexdocker/frontend:latest
+    container_name: frontend-multiplex
+    environment:
+      SERVER_PORT: ${FRONTEND_SERVER_PORT}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DB: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      EUREKA_HOST: ${EUREKA_HOST}
+    ports:
+      - "${FRONTEND_SERVER_PORT}:8080"
+    depends_on:
+      - mysql
+      - backend1
+
+volumes:
+  mysql_data:
