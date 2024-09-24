@@ -1,5 +1,8 @@
 # Multiplex Management System
 
+Excel: 
+[Destinationexcel.xlsx](https://github.com/user-attachments/files/17110197/Destinationexcel.xlsx)
+
 ## Overview
 
 The Multiplex Management System is a comprehensive solution for managing multiplex theaters, including seat booking, pricing, membership management, and administrative functions. This system integrates various features to enhance the user experience and streamline multiplex operations.
