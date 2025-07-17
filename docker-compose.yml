@@ -31,14 +31,14 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: Admin@123Admin@123
       EUREKA_HOST: eureka-server
-      RZP_KEY_ID: rzp_test_RYaOC10U6IjI9N
-      RZP_KEY_SECRET: 1FrgQAzBOwh2fyd0v7dVmoPS
+      RZP_KEY_ID: 
+      RZP_KEY_SECRET: 
       RZP_CURRENCY: INR
       RZP_COMPANY_NAME: MyCompany
       SPRING_MAIL_HOST: smtp.gmail.com
       SPRING_MAIL_PORT: 587
-      SPRING_MAIL_USERNAME: bahubalicantlive@gmail.com
-      SPRING_MAIL_PASSWORD: hpogdeygcwiibhak
+      SPRING_MAIL_USERNAME: @gmail.com
+      SPRING_MAIL_PASSWORD: 
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
     ports:
@@ -57,14 +57,14 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: Admin@123Admin@123
       EUREKA_HOST: eureka-server
-      RZP_KEY_ID: rzp_test_RYaOC10U6IjI9N
-      RZP_KEY_SECRET: 1FrgQAzBOwh2fyd0v7dVmoPS
+      RZP_KEY_ID: 
+      RZP_KEY_SECRET: 
       RZP_CURRENCY: INR
       RZP_COMPANY_NAME: MyCompany
       SPRING_MAIL_HOST: smtp.gmail.com
       SPRING_MAIL_PORT: 587
-      SPRING_MAIL_USERNAME: bahubalicantlive@gmail.com
-      SPRING_MAIL_PASSWORD: hpogdeygcwiibhak
+      SPRING_MAIL_USERNAME: @gmail.com
+      SPRING_MAIL_PASSWORD: 
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
     ports:
